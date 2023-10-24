@@ -245,9 +245,11 @@ local function get_closest_test()
 end
 
 function M.debug_test()
-  local testname = get_closest_test()
-  local relativeFileDirname = vim.fn.fnamemodify(vim.fn.expand("%:.:h"), ":r")
+  local root = vim.fn.GetTopModPath(vim.fn.expand("%:p:h")) .. "/"
+  vim.cmd("lcd " .. root)
+  local relativeFileDirname = string.sub(vim.fn.resolve(vim.fn.expand("%:p:h")), string.len(root) + 1)
   local testpath = string.format("./%s", relativeFileDirname)
+  local testname = get_closest_test()
 
   if testname == "" then
     vim.notify("no test found")
